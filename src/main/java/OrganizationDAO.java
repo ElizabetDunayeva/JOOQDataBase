@@ -158,24 +158,26 @@ public class OrganizationDAO implements DAO<Organization>{
         return result;
     }
 
+    /**
+     * Рассчитать среднюю цену полученного товара за период
+     * @param limit1 начало периода
+     * @param limit2 конец периода
+     * @return
+     */
     public int GetAVGPriceForPeriod(LocalDate limit1, LocalDate limit2){
-         int AvgPrice;
-        final List<Integer> result = new ArrayList<>();
+
+
         java.sql.Date sqlDate1 = java.sql.Date.valueOf( limit1 );
-        System.out.println(sqlDate1);
         java.sql.Date sqlDate2 = java.sql.Date.valueOf( limit2 );
         try (Statement stmt = connection.createStatement()) {
-            try (ResultSet rs = stmt.executeQuery("SELECT AVG(PRICE) AS PRICE\n" +
+            try (ResultSet rs = stmt.executeQuery("SELECT ROUND(AVG(PRICE),1) AS PRICE\n" +
                     "from POSITIONS P\n" +
                     "LEFT JOIN INVOICES I ON(I.Number = P.Number_Invoice)\n" +
-                    "WHERE I.Date_Of >="+" sqlDate1"+" AND I.Date_Of <= "+"sqlDate2"
+                    "WHERE I.Date_Of >= DATE'"+sqlDate1 +"' AND I.Date_Of <= DATE'"+sqlDate2+"'"
             )) {
                 while (rs.next()) {
-                    result.add(rs.getInt(0)) ;
-                    System.out.println(rs.getInt(0));
-                    System.out.println(rs.getInt(1));
-                    System.out.println(rs.getInt("price"));
-                    //return rs.getInt(1);
+
+                    return rs.getInt(1);
 
                 }
             }
@@ -184,7 +186,7 @@ public class OrganizationDAO implements DAO<Organization>{
         catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return 1;
+        throw new IllegalStateException("Record with id not found");
     }
 
 }
