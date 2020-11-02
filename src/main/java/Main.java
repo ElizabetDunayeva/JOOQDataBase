@@ -23,6 +23,7 @@ public class Main {
         {
             System.out.println("Connection Ok.");
             final OrganizationDAO organizationDAO = new OrganizationDAO(connection);
+            final NomenclaturaDAO nomenclaturaDAO = new NomenclaturaDAO(connection);
 
             organizationDAO.save( new Organization(12345,123,"Организация11"));
             System.out.println("Все организации:");
@@ -42,6 +43,13 @@ public class Main {
             LocalDate d1 =  LocalDate.of(2019,9,4);
             LocalDate d2 =  LocalDate.of(2019,11,4);
             System.out.println(organizationDAO.GetAVGPriceForPeriod(d1, d2));
+            System.out.println("Продукты за период");
+            organizationDAO.GetProductsByTime(d1,d2);
+            System.out.println("Продукты и итоги за период");
+            List<Nomenclatura>products = nomenclaturaDAO.getAll();
+            for(Nomenclatura prod :products){
+                organizationDAO.GetInformation3(prod.getCod_Id(),d1,d2);
+            }
 
 
 

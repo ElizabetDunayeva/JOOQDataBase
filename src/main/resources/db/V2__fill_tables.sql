@@ -18,15 +18,15 @@ INSERT INTO Organizations(Name,INN,Account)VALUES('Organization9',4259,2004);
 
 INSERT INTO Organizations(Name,INN,Account)VALUES('Organization10',4281,1208);
 
-INSERT INTO Nomenclatures(Name, Cod_ID)VALUES('Товар1',1);
+INSERT INTO Nomenclatures(Name, Cod_ID)VALUES('Product1',1);
 
-INSERT INTO Nomenclatures(Name, Cod_ID)VALUES('Товар2',2);
+INSERT INTO Nomenclatures(Name, Cod_ID)VALUES('Product2',2);
 
-INSERT INTO Nomenclatures(Name, Cod_ID)VALUES('Товар3',3);
+INSERT INTO Nomenclatures(Name, Cod_ID)VALUES('Product3',3);
 
-INSERT INTO Nomenclatures(Name, Cod_ID)VALUES('Товар4',4);
+INSERT INTO Nomenclatures(Name, Cod_ID)VALUES('Product4',4);
 
-INSERT INTO Nomenclatures(Name, Cod_ID)VALUES('Товар5',5);
+INSERT INTO Nomenclatures(Name, Cod_ID)VALUES('Product5',5);
 
 INSERT INTO Invoices(Number, Date_of,Organization_ID)VALUES(1,'2019-12-04',4210);
 INSERT INTO Invoices(Number, Date_of,Organization_ID)VALUES(2,'2019-10-04',4250);

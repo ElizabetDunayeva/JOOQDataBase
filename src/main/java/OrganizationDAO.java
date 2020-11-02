@@ -2,7 +2,9 @@
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class OrganizationDAO implements DAO<Organization>{
 
@@ -189,4 +191,73 @@ public class OrganizationDAO implements DAO<Organization>{
         throw new IllegalStateException("Record with id not found");
     }
 
+
+    public void GetProductsByTime(LocalDate limit1, LocalDate limit2){
+
+        java.sql.Date sqlDate1 = java.sql.Date.valueOf( limit1 );
+        java.sql.Date sqlDate2 = java.sql.Date.valueOf( limit2 );
+        List<Organization> organizations = this.getAll();
+
+        try (Statement stmt = connection.createStatement()) {
+            try (ResultSet rs = stmt.executeQuery("SELECT O.Name,O.INN,N.Name,N.COD_ID\n" +
+                    "from ORGANIZATIONS O\n" +
+                    "LEFT JOIN INVOICES I\n" +
+                    "  ON(I.organization_id = O.inn),NOMENCLATURES N\n" +
+                    "WHERE I.DATE_OF >=DATE'"+sqlDate1+"'AND I.DATE_OF<=DATE'"+sqlDate2+"'\n" +
+                    "ORDER BY O.INN\n"
+            )) {
+                while (rs.next()) {
+
+                    System.out.println("Name of Organization: " +rs.getString(1));
+                    System.out.println("INN of Organization: " +rs.getInt("INN"));
+                    System.out.println("Name of Product: " +rs.getString(3));
+                    System.out.println("Cod of Product: " +rs.getInt("Cod_ID"));
+
+
+
+                }
+            }
+
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        //throw new IllegalStateException("Record with id not found");
+    }
+
+    public void GetInformation3(int productId,LocalDate limit1, LocalDate limit2){
+
+        java.sql.Date sqlDate1 = java.sql.Date.valueOf( limit1 );
+        java.sql.Date sqlDate2 = java.sql.Date.valueOf( limit2 );
+        try (Statement stmt = connection.createStatement()) {
+            try (ResultSet rs = stmt.executeQuery("SELECT I.Date_Of, sum(P.AMOUNT)AS A,sum(P.AMOUNT *P.PRICE)AS B\n" +
+                    "FROM INVOICES I\n" +
+                    "LEFT JOIN POSITIONS P\n" +
+                    "ON (I.number=P.number_invoice)\n" +
+                    "GROUP BY I.Date_of,P.Nomenclature_ID\n" +
+                    "HAVING P.Nomenclature_ID = 1 ANd  I.DATE_OF<=DATE'"+sqlDate2+"' and I.Date_Of>= DATE'"+sqlDate1 +"'"
+            )) {
+                System.out.println("Product_ID :"+productId);
+                while (rs.next()) {
+
+                    System.out.println("Date: " +rs.getDate(1));
+                    System.out.println("COUNT: " +rs.getInt("A"));
+                    System.out.println("SUM: " +rs.getString("B"));
+
+                }
+            }
+
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        //throw new IllegalStateException("Record with id not found");
+
+
+
+
+    }
+
 }
+
+
